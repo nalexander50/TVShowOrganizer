@@ -12,14 +12,16 @@ class Season:
         self.folder_path = folder_path
 
     def rename(self, should_modify):
+        old_name = os.path.basename(self.folder_path)
+
         new_name = f'Season {self.season_number:02}'
         new_path = os.path.join(os.path.dirname(self.folder_path), new_name)
         if should_modify:
             os.rename(self.folder_path, new_path)
             self.folder_path = new_path
-            return f'[RENAMED] {os.path.basename(self.folder_path)} -> {new_name}'
+            return f'[RENAMED] {old_name} -> {new_name}'
         else:
-            return f'Rename {os.path.basename(self.folder_path)} -> {new_name}'
+            return f'Rename {old_name} -> {new_name}'
 
     def __str__(self):
         return f'Season {self.season_number:02} ({self.tv_show.show_name})'

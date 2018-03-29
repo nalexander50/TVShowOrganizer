@@ -9,7 +9,7 @@
             "pythonPath": "${config:python.pythonPath}",
             "program": "${workspaceFolder}/src/main.py",
             "args": [
-                "/Users/Nick/Developer/TVShowOrganizer/data/Flashpoint"
+                "/Users/Nick/Developer/TVShowOrganizer/test_data/Flashpoint",
             ],
             "cwd": "${workspaceFolder}",
             "env": {},
@@ -26,7 +26,7 @@
             "pythonPath": "${config:python.pythonPath}",
             "program": "${workspaceFolder}/src/main.py",
             "args": [
-                "/Users/Nick/Developer/TVShowOrganizer/data/Flashpoint",
+                "/Users/Nick/Developer/TVShowOrganizer/test_data/Flashpoint",
                 "--whatIf"
             ],
             "cwd": "${workspaceFolder}",
