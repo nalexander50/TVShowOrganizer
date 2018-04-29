@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+from operations import Operations
+
 class Episode:
 
     season = None
@@ -24,10 +26,16 @@ class Episode:
         else:
             return f'Rename {os.path.basename(self.file_path)} -> {new_name}'
 
-    def encode(self, new_extension, should_modify):
+    def convert(self, new_extension, operation, should_modify):
+        if operation == Operations.TRANSCODE:
+            return self.__transcode(new_extension, should_modify)
+        elif operation == Operations.REMUX:
+            return self.__remux(new_extension, should_modify)
+
+    def __transcode(self, new_extension, should_modify):
         old_file_path = self.file_path
 
-        file_name, _ = os.path.splitext(old_file_path)
+        file_name, _ = os.path.splitext(os.path.basename(old_file_path))
         new_file_path = os.path.join(os.path.dirname(old_file_path), f'{file_name}{new_extension}')
 
         if should_modify:    
@@ -39,6 +47,25 @@ class Episode:
             return f'[ENCODED] {new_file_path} [DELETED] {old_file_path}'
         else:
             return f'Encode {new_file_path} Delete {old_file_path}'
+
+    def __remux(self, new_extension, should_modify):
+        old_file_path = self.file_path
+
+        file_name, _ = os.path.splitext(os.path.basename(old_file_path))
+        print(file_name)
+
+        new_file_path = os.path.join(os.path.dirname(old_file_path), f'{file_name}{new_extension}')
+        print(new_file_path)
+
+        if should_modify:    
+            subprocess.run(args=['ffmpeg', '-i', old_file_path, '-c', 'copy', '-map', '0', new_file_path], check=True)
+            os.remove(old_file_path)
+
+            self.file_path = new_file_path
+
+            return f'[REMUXED] {new_file_path}'
+        else:
+            return f'Remux {new_file_path}'
 
     def __str__(self):
         return f'Episode {self.episode_number:02} (s{self.season.season_number:02}) ({self.season.tv_show.show_name})'
